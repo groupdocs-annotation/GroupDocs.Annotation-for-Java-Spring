@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <title>GroupDocs.Annotation for Java Spring</title>
+    <link type="text/css" rel="stylesheet" href="assets/common/css/font-awesome.min.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/common/css/swiper.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/common/css/jquery-ui.min.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/common/css/circle-progress.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/viewer/css/viewer.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/viewer/css/viewer.mobile.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/viewer/css/viewer-dark.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/annotation/css/annotation.css"/>
+    <script type="text/javascript" src="assets/common/js/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/common/js/swiper.min.js"></script>
+    <script type="text/javascript" src="assets/common/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="assets/common/js/jquery.ui.touch-punch.min.js"></script>
+    <script type="text/javascript" src="assets/common/js/jquery.initialize.min.js"></script>
+    <script type="text/javascript" src="assets/viewer/js/viewer.js"></script>
+    <script type="text/javascript" src="assets/annotation/js/svg.min.js"></script>
+    <script type="text/javascript" src="assets/annotation/js/svg.draw.js"></script>
+    <script type="text/javascript" src="assets/annotation/js/drawSvgAnnotation.js"></script>
+    <script type="text/javascript" src="assets/annotation/js/drawTextAnnotation.js"></script>
+    <script type="text/javascript" src="assets/annotation/js/drawFieldAnnotation.js"></script>
+    <script type="text/javascript" src="assets/annotation/js/annotation.js"></script>
+</head>
+<body>
+<div id="element"></div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $('#element').viewer({
+        /*[+
+        applicationPath: 'http://' + [[${globalConfiguration.server.hostAddress}]] + ':' + [[${globalConfiguration.server.httpPort}]] + '/annotation',
+        +]*/
+        defaultDocument: /*[[${annotationConfiguration.defaultDocument}]]*/'',
+        htmlMode: false,
+        preloadPageCount: /*[[${annotationConfiguration.preloadPageCount}]]*/'',
+        zoom : false,
+        pageSelector: /*[[${annotationConfiguration.pageSelector}]]*/'',
+        search: false,
+        thumbnails: false,
+        rotate: false,
+        download: /*[[${annotationConfiguration.download}]]*/'',
+        upload: /*[[${annotationConfiguration.upload}]]*/'',
+        print: /*[[${annotationConfiguration.print}]]*/'',
+        browse: /*[[${annotationConfiguration.browse}]]*/'',
+        rewrite: /*[[${annotationConfiguration.rewrite}]]*/'',
+    });
+    $('#element').annotation({
+        textAnnotation: /*[[${annotationConfiguration.textAnnotation}]]*/'',
+        areaAnnotation: /*[[${annotationConfiguration.areaAnnotation}]]*/'',
+        pointAnnotation: /*[[${annotationConfiguration.pointAnnotation}]]*/'',
+        textStrikeoutAnnotation: /*[[${annotationConfiguration.textStrikeoutAnnotation}]]*/'',
+        polylineAnnotation: /*[[${annotationConfiguration.polylineAnnotation}]]*/'',
+        textFieldAnnotation: /*[[${annotationConfiguration.textFieldAnnotation}]]*/'',
+        watermarkAnnotation: /*[[${annotationConfiguration.watermarkAnnotation}]]*/'',
+        textReplacementAnnotation: /*[[${annotationConfiguration.textReplacementAnnotation}]]*/'',
+        arrowAnnotation: /*[[${annotationConfiguration.arrowAnnotation}]]*/'',
+        textRedactionAnnotation: /*[[${annotationConfiguration.textRedactionAnnotation}]]*/'',
+        resourcesRedactionAnnotation: /*[[${annotationConfiguration.resourcesRedactionAnnotation}]]*/'',
+        textUnderlineAnnotation: /*[[${annotationConfiguration.textUnderlineAnnotation}]]*/'',
+        distanceAnnotation: /*[[${annotationConfiguration.distanceAnnotation}]]*/'',
+        downloadOriginal:  /*[[${annotationConfiguration.downloadOriginal}]]*/'',
+        downloadAnnotated:  /*[[${annotationConfiguration.downloadAnnotated}]]*/''
+    });
+    /*]]>*/
+</script>
+</body>
+</html>
