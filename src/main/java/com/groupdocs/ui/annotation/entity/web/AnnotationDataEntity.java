@@ -43,10 +43,6 @@ public class AnnotationDataEntity {
      */
     private String type;
     /**
-     * The type of document
-     */
-    private String documentType;
-    /**
      * Annotation text
      */
     private String text;
@@ -133,14 +129,6 @@ public class AnnotationDataEntity {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getDocumentType() {
-        return documentType;
-    }
-
-    public void setDocumentType(String documentType) {
-        this.documentType = documentType;
     }
 
     public String getText() {
