@@ -15,7 +15,6 @@ public class TextAnnotator extends AbstractSvgAnnotator {
 
     public TextAnnotator(AnnotationDataEntity annotationData, PageData pageData) {
         super(annotationData, pageData);
-        setFixTop(false);
     }
 
     @Override
@@ -46,6 +45,7 @@ public class TextAnnotator extends AbstractSvgAnnotator {
         // we use such calculation since the GroupDocs.Annotation library takes text line position from the bottom of the page
         double topPosition = pageData.getHeight() - annotationData.getTop();
         textAnnotation.setAnnotationPosition(new Point(annotationData.getLeft(), topPosition));
+        textAnnotation.setBox(new Rectangle(0, 0, 0, 0));
         return textAnnotation;
     }
 
@@ -53,6 +53,7 @@ public class TextAnnotator extends AbstractSvgAnnotator {
     public AnnotationInfo annotateSlides() throws ParseException {
         // init possible types of annotations
         AnnotationInfo textAnnotation = initAnnotationInfo();
+        textAnnotation.getBox().setX((float) (annotationData.getLeft() / 4));
         return textAnnotation;
     }
 
