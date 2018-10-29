@@ -1,5 +1,5 @@
 # GroupDocs.Annotation-for-Java-Spring Example
-###### version 1.3.0
+###### version 1.4.0
 
 
 ## System Requirements
