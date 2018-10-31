@@ -60,7 +60,6 @@ public class AnnotationServiceImpl implements AnnotationService {
     @Autowired
     private AnnotationConfiguration annotationConfiguration;
 
-    private AnnotationConfig config;
     private AnnotationImageHandler annotationHandler;
 
     @PostConstruct
@@ -68,7 +67,7 @@ public class AnnotationServiceImpl implements AnnotationService {
         // init output directory
         initOutputDirectory();
         // create annotation application configuration
-        config = new AnnotationConfig();
+        AnnotationConfig config = new AnnotationConfig();
         // set storage path
         config.setStoragePath(annotationConfiguration.getFilesDirectory());
         config.getFontDirectories().add(annotationConfiguration.getFontsDirectory());
