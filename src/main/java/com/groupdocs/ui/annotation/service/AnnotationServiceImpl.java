@@ -61,6 +61,7 @@ public class AnnotationServiceImpl implements AnnotationService {
     private AnnotationConfiguration annotationConfiguration;
 
     private AnnotationConfig config;
+    private AnnotationImageHandler annotationHandler;
 
     @PostConstruct
     public void init() {
@@ -71,6 +72,8 @@ public class AnnotationServiceImpl implements AnnotationService {
         // set storage path
         config.setStoragePath(annotationConfiguration.getFilesDirectory());
         config.getFontDirectories().add(annotationConfiguration.getFontsDirectory());
+
+        annotationHandler = new AnnotationImageHandler(config);
 
         try {
             // set GroupDocs license
@@ -223,7 +226,7 @@ public class AnnotationServiceImpl implements AnnotationService {
      * @return AnnotationImageHandler
      */
     private AnnotationImageHandler getAnnotationImageHandler() {
-        return new AnnotationImageHandler(config);
+        return annotationHandler;
     }
 
     @Override
