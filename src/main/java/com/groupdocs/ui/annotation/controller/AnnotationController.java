@@ -57,6 +57,7 @@ public class AnnotationController {
      * @return template name
      */
     @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
     public String getView(Map<String, Object> model) {
         model.put("globalConfiguration", annotationService.getGlobalConfiguration());
         logger.debug("annotation config: {}", annotationService.getAnnotationConfiguration());
