@@ -1,5 +1,5 @@
 # GroupDocs.Annotation-for-Java-Spring Example
-###### version 1.5.0
+###### version 1.6.0
 
 [![Build Status](https://travis-ci.org/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring.svg?branch=master)](https://travis-ci.org/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f6de7b4597a02ddb09df/maintainability)](https://codeclimate.com/github/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring/maintainability)
