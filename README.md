@@ -1,3 +1,4 @@
+![Alt text](https://raw.githubusercontent.com/groupdocs-annotation/groupdocs-annotation.github.io/master/resources/image/banner.png "GroupDocs.Annotation")
 # GroupDocs.Annotation-for-Java-Spring Example
 ###### version 1.6.0
 
