@@ -3,6 +3,12 @@ package com.groupdocs.ui.annotation.config;
 import com.groupdocs.ui.config.CommonConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import javax.annotation.PostConstruct;
+
+import static com.groupdocs.ui.config.DefaultDirectories.defaultAnnotationDirectory;
+import static com.groupdocs.ui.config.DefaultDirectories.relativePathToAbsolute;
 
 /**
  * AnnotationConfiguration
@@ -71,6 +77,11 @@ public class AnnotationConfiguration extends CommonConfiguration {
 
     @Value("#{new Boolean('${annotation.downloadAnnotated}')}")
     private boolean downloadAnnotated;
+
+    @PostConstruct
+    public void init() {
+        this.filesDirectory = StringUtils.isEmpty(this.filesDirectory) ? defaultAnnotationDirectory() : relativePathToAbsolute(this.filesDirectory);
+    }
 
     public String getFilesDirectory() {
         return filesDirectory;
