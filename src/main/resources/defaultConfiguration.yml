@@ -15,8 +15,8 @@ server:
 ################################################
 application:
   # License path
-  # Absolute path to GroupDocs license file
-  licensePath:  C:/GroupDocs/Java/Total/GroupDocs.Annotation.Java.lic
+  # Absolute or relative path to GroupDocs license file
+  licensePath: Licenses/GroupDocs.Annotation.Java.lic
 
 ################################################
 # Common configurations
@@ -47,8 +47,8 @@ common:
 ################################################
 annotation:
   # Files directory path
-  # Absolute path to files directory
-  filesDirectory: C:/GroupDocs/Documents/
+  # Absolute or relative path to files directory
+  filesDirectory: DocumentSamples
   # Default document
   # Absolute path to default document
   defaultDocument:

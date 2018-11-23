@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Comparator;
 import java.util.List;
@@ -23,7 +24,6 @@ import java.util.Map;
 import static org.springframework.http.HttpHeaders.CONTENT_LENGTH;
 
 public class Utils {
-
     private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 
     public static final FileNameComparator FILE_NAME_COMPARATOR = new FileNameComparator();
@@ -109,15 +109,17 @@ public class Utils {
         if (rewrite) {
             // save file with rewrite if exists
             Files.copy(uploadedInputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            return filePath;
         } else {
             if (file.exists()) {
                 // get file with new name
                 file = getFreeFileName(documentStoragePath, fileName);
             }
-            // save file with out rewriting
-            Files.copy(uploadedInputStream, file.toPath());
+            // save file without rewriting
+            Path path = file.toPath();
+            Files.copy(uploadedInputStream, path);
+            return path.toString();
         }
-        return filePath;
     }
 
     /**
@@ -153,7 +155,7 @@ public class Utils {
             for (int i = 0; i < listOfFiles.length; i++) {
                 int number = i + 1;
                 String newFileName = FilenameUtils.removeExtension(fileName) + "-Copy(" + number + ")." + FilenameUtils.getExtension(fileName);
-                file = new File(directory + "/" + newFileName);
+                file = new File(directory + File.separator + newFileName);
                 if (file.exists()) {
                     continue;
                 } else {
