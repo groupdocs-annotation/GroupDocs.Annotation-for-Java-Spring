@@ -2,9 +2,7 @@ package com.groupdocs.ui.annotation.service;
 
 import com.groupdocs.ui.annotation.config.AnnotationConfiguration;
 import com.groupdocs.ui.annotation.entity.request.AnnotateDocumentRequest;
-import com.groupdocs.ui.annotation.entity.request.TextCoordinatesRequest;
 import com.groupdocs.ui.annotation.entity.web.AnnotatedDocumentEntity;
-import com.groupdocs.ui.annotation.entity.web.TextRowEntity;
 import com.groupdocs.ui.config.GlobalConfiguration;
 import com.groupdocs.ui.model.request.FileTreeRequest;
 import com.groupdocs.ui.model.request.LoadDocumentPageRequest;
@@ -55,14 +53,6 @@ public interface AnnotationService {
      * @return document page data
      */
     LoadedPageEntity getDocumentPage(LoadDocumentPageRequest loadDocumentPageRequest);
-
-    /**
-     * Get coordinates of text
-     *
-     * @param textCoordinatesRequest request object
-     * @return list of text row coordinates
-     */
-    List<TextRowEntity> getTextCoordinates(TextCoordinatesRequest textCoordinatesRequest);
 
     /**
      * Annotate document

@@ -6,7 +6,6 @@ import com.groupdocs.annotation.common.license.License;
 import com.groupdocs.annotation.domain.AnnotationInfo;
 import com.groupdocs.annotation.domain.FileDescription;
 import com.groupdocs.annotation.domain.PageData;
-import com.groupdocs.annotation.domain.RowData;
 import com.groupdocs.annotation.domain.config.AnnotationConfig;
 import com.groupdocs.annotation.domain.containers.DocumentInfoContainer;
 import com.groupdocs.annotation.domain.containers.FileTreeContainer;
@@ -17,10 +16,8 @@ import com.groupdocs.annotation.handler.AnnotationImageHandler;
 import com.groupdocs.ui.annotation.annotator.AnnotatorFactory;
 import com.groupdocs.ui.annotation.config.AnnotationConfiguration;
 import com.groupdocs.ui.annotation.entity.request.AnnotateDocumentRequest;
-import com.groupdocs.ui.annotation.entity.request.TextCoordinatesRequest;
 import com.groupdocs.ui.annotation.entity.web.AnnotatedDocumentEntity;
 import com.groupdocs.ui.annotation.entity.web.AnnotationDataEntity;
-import com.groupdocs.ui.annotation.entity.web.TextRowEntity;
 import com.groupdocs.ui.annotation.importer.Importer;
 import com.groupdocs.ui.annotation.util.AnnotationMapper;
 import com.groupdocs.ui.config.GlobalConfiguration;
@@ -226,36 +223,6 @@ public class AnnotationServiceImpl implements AnnotationService {
      */
     private AnnotationImageHandler getAnnotationImageHandler() {
         return annotationHandler;
-    }
-
-    @Override
-    public List<TextRowEntity> getTextCoordinates(TextCoordinatesRequest textCoordinatesRequest) {
-        try {
-            // get/set parameters
-            String documentGuid = textCoordinatesRequest.getGuid();
-            String password = textCoordinatesRequest.getPassword();
-            int pageNumber = textCoordinatesRequest.getPageNumber();
-            // get document info
-            DocumentInfoContainer info = getAnnotationImageHandler().getDocumentInfo(new File(documentGuid).getName(), password);
-            // get all rows info for specific page
-            List<RowData> rows = info.getPages().get(pageNumber - 1).getRows();
-            // initiate list of the TextRowEntity
-            List<TextRowEntity> textCoordinates = new ArrayList<>();
-            // get each row info
-            for (int i = 0; i < rows.size(); i++) {
-                RowData rowData = rows.get(i);
-
-                TextRowEntity textRow = new TextRowEntity();
-                textRow.setTextCoordinates(rowData.getTextCoordinates());
-                textRow.setLineTop(rowData.getLineTop());
-                textRow.setLineHeight(rowData.getLineHeight());
-
-                textCoordinates.add(textRow);
-            }
-            return textCoordinates;
-        } catch (Exception ex) {
-            throw new TotalGroupDocsException(ex.getMessage(), ex);
-        }
     }
 
     @Override
