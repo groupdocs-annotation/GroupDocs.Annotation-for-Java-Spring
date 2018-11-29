@@ -20,6 +20,7 @@ import com.groupdocs.ui.annotation.entity.request.AnnotateDocumentRequest;
 import com.groupdocs.ui.annotation.entity.request.TextCoordinatesRequest;
 import com.groupdocs.ui.annotation.entity.web.AnnotatedDocumentEntity;
 import com.groupdocs.ui.annotation.entity.web.AnnotationDataEntity;
+import com.groupdocs.ui.annotation.entity.web.AnnotationLoadedPageEntity;
 import com.groupdocs.ui.annotation.entity.web.TextRowEntity;
 import com.groupdocs.ui.annotation.importer.Importer;
 import com.groupdocs.ui.annotation.util.AnnotationMapper;
@@ -211,8 +212,10 @@ public class AnnotationServiceImpl implements AnnotationService {
             String encodedImage = Base64.getEncoder().encodeToString(bytes);
 
             // loaded page object
-            LoadedPageEntity loadedPage = new LoadedPageEntity();
+            AnnotationLoadedPageEntity loadedPage = new AnnotationLoadedPageEntity();
             loadedPage.setPageImage(encodedImage);
+
+            loadedPage.setCoordinates(getTextRowEntities(documentGuid, password, pageNumber));
             return loadedPage;
         } catch (Exception ex) {
             throw new TotalGroupDocsException(ex.getMessage(), ex);
@@ -230,11 +233,15 @@ public class AnnotationServiceImpl implements AnnotationService {
 
     @Override
     public List<TextRowEntity> getTextCoordinates(TextCoordinatesRequest textCoordinatesRequest) {
+        // get/set parameters
+        String documentGuid = textCoordinatesRequest.getGuid();
+        String password = textCoordinatesRequest.getPassword();
+        int pageNumber = textCoordinatesRequest.getPageNumber();
+        return getTextRowEntities(documentGuid, password, pageNumber);
+    }
+
+    private List<TextRowEntity> getTextRowEntities(String documentGuid, String password, int pageNumber) {
         try {
-            // get/set parameters
-            String documentGuid = textCoordinatesRequest.getGuid();
-            String password = textCoordinatesRequest.getPassword();
-            int pageNumber = textCoordinatesRequest.getPageNumber();
             // get document info
             DocumentInfoContainer info = getAnnotationImageHandler().getDocumentInfo(new File(documentGuid).getName(), password);
             // get all rows info for specific page
