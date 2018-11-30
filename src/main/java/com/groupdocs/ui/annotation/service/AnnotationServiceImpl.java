@@ -171,6 +171,8 @@ public class AnnotationServiceImpl implements AnnotationService {
             // get info about each document page
             List<PageImage> pageImages = null;
             List<PageData> pages = documentDescription.getPages();
+
+            // TODO: remove once perf. issue is fixed
             if(annotationConfiguration.getPreloadPageCount() == 0){
                  pageImages = getAnnotationImageHandler().getPages(fileName, imageOptions);
             }
@@ -187,6 +189,7 @@ public class AnnotationServiceImpl implements AnnotationService {
                 if (annotations != null && annotations.length > 0) {
                     description.setAnnotations(AnnotationMapper.instance.mapForPage(annotations, description.getNumber()));
                 }
+                // TODO: remove once perf. issue is fixed
                 if(pageImages != null) {
                     byte[] bytes = IOUtils.toByteArray(pageImages.get(i).getStream());
                     String encodedImage = Base64.getEncoder().encodeToString(bytes);

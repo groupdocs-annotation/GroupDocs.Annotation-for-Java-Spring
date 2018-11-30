@@ -16,7 +16,7 @@ server:
 application:
   # License path
   # Absolute path to GroupDocs license file
-  licensePath:  Licenses/GroupDocs.Annotation.Java.lic
+  licensePath:  /Users/pavelegorov/Documents/repos/licenses/GroupDocs.Total.Java.lic
 
 ################################################
 # Common configurations
@@ -48,7 +48,7 @@ common:
 annotation:
   # Files directory path
   # Absolute path to files directory
-  filesDirectory: DocumentSamples
+  filesDirectory: /Users/pavelegorov/Documents/repos/uploads
   # Default document
   # Absolute path to default document
   defaultDocument:

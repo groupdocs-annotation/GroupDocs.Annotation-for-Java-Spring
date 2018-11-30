@@ -17,6 +17,7 @@ public class AnnotatedDocumentEntity extends DocumentDescriptionEntity {
      */
     private AnnotationDataEntity[] annotations;
 
+    // TODO: remove once perf. issue is fixed
     private String data;
 
     public String getGuid() {
