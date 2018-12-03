@@ -147,6 +147,11 @@ public class AnnotationServiceImpl implements AnnotationService {
             // get/set parameters
             String documentGuid = loadDocumentRequest.getGuid();
             String password = loadDocumentRequest.getPassword();
+            ImageOptions imageOptions = new ImageOptions();
+            // set password for protected document
+            if (!password.isEmpty()) {
+                imageOptions.setPassword(password);
+            }
             // get document info container
             String fileName = new File(documentGuid).getName();
             DocumentInfoContainer documentDescription = getAnnotationImageHandler().getDocumentInfo(fileName, password);
@@ -164,7 +169,13 @@ public class AnnotationServiceImpl implements AnnotationService {
             // initiate pages description list
             List<AnnotatedDocumentEntity> pagesDescription = new ArrayList<>();
             // get info about each document page
+            List<PageImage> pageImages = null;
             List<PageData> pages = documentDescription.getPages();
+
+            // TODO: remove once perf. issue is fixed
+            if(annotationConfiguration.getPreloadPageCount() == 0){
+                 pageImages = getAnnotationImageHandler().getPages(fileName, imageOptions);
+            }
             for (int i = 0; i < pages.size(); i++) {
                 // initiate custom Document description object
                 AnnotatedDocumentEntity description = new AnnotatedDocumentEntity();
@@ -177,6 +188,12 @@ public class AnnotationServiceImpl implements AnnotationService {
                 // set annotations data if document page contains annotations
                 if (annotations != null && annotations.length > 0) {
                     description.setAnnotations(AnnotationMapper.instance.mapForPage(annotations, description.getNumber()));
+                }
+                // TODO: remove once perf. issue is fixed
+                if(pageImages != null) {
+                    byte[] bytes = IOUtils.toByteArray(pageImages.get(i).getStream());
+                    String encodedImage = Base64.getEncoder().encodeToString(bytes);
+                    description.setData(encodedImage);
                 }
                 pagesDescription.add(description);
             }
@@ -203,8 +220,8 @@ public class AnnotationServiceImpl implements AnnotationService {
                 imageOptions.setPassword(password);
             }
             // get page image
-            InputStream document = new FileInputStream(documentGuid);
-            List<PageImage> images = getAnnotationImageHandler().getPages(document, imageOptions);
+            String fileName = new File(documentGuid).getName();
+            List<PageImage> images = getAnnotationImageHandler().getPages(fileName, imageOptions);
 
             byte[] bytes = IOUtils.toByteArray(images.get(pageNumber - 1).getStream());
             // encode ByteArray into String

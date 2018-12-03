@@ -1,39 +1,17 @@
 package com.groupdocs.ui.annotation.entity.request;
 
+import com.groupdocs.ui.model.request.LoadDocumentRequest;
+
 /**
  * TextCoordinatesRequest
  *
  * @author Aspose Pty Ltd
  */
-public class TextCoordinatesRequest {
-    /**
-     * Guid of document
-     */
-    private String guid;
-    /**
-     * Password of document
-     */
-    private String password;
+public class TextCoordinatesRequest extends LoadDocumentRequest {
     /**
      * The number of page in document
      */
     private int pageNumber;
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getGuid() {
-        return guid;
-    }
-
-    public void setGuid(String guid) {
-        this.guid = guid;
-    }
 
     public int getPageNumber() {
         return pageNumber;

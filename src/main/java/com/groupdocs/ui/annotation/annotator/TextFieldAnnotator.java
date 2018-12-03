@@ -1,9 +1,6 @@
 package com.groupdocs.ui.annotation.annotator;
 
-import com.groupdocs.annotation.domain.AnnotationInfo;
-import com.groupdocs.annotation.domain.AnnotationType;
-import com.groupdocs.annotation.domain.PageData;
-import com.groupdocs.annotation.domain.Point;
+import com.groupdocs.annotation.domain.*;
 import com.groupdocs.ui.annotation.entity.web.AnnotationDataEntity;
 
 import java.text.ParseException;
@@ -33,6 +30,8 @@ public class TextFieldAnnotator extends AbstractTextAnnotator {
         // Text field annotation
         AnnotationInfo textFieldAnnotation = initAnnotationInfo();
         textFieldAnnotation.setAnnotationPosition(new Point(annotationData.getLeft(), annotationData.getTop()));
+        textFieldAnnotation.setFontColor(255);
+        textFieldAnnotation.setBackgroundColor(16777215);
         return textFieldAnnotation;
     }
 
