@@ -330,7 +330,7 @@ public class AnnotationServiceImpl implements AnnotationService {
         return annotatedDocument;
     }
 
-    private String parseFileExtension(String documentGuid) {
+    public String parseFileExtension(String documentGuid) {
         String extension = FilenameUtils.getExtension(documentGuid);
         return extension == null ? null : extension.toLowerCase();
     }
