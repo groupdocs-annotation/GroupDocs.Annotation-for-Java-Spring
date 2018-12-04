@@ -294,10 +294,11 @@ public class AnnotationServiceImpl implements AnnotationService {
             }
             // initiate list of annotations to add
             List<AnnotationInfo> annotations = new ArrayList<>();
+            InputStream file = new FileInputStream(documentGuid);
+            file = getAnnotationImageHandler().removeAnnotationStream(file);
             Throwable exc = null;
-            for (int i = 0; i < annotationsData.length; i++) {
+            for (AnnotationDataEntity annotationData : annotationsData) {
                 // create annotator
-                AnnotationDataEntity annotationData = annotationsData[i];
                 PageData pageData = documentInfo.getPages().get(annotationData.getPageNumber() - 1);
                 // add annotation, if current annotation type isn't supported by the current document type it will be ignored
                 try {
@@ -308,22 +309,20 @@ public class AnnotationServiceImpl implements AnnotationService {
                     throw new TotalGroupDocsException(ex.getMessage(), ex);
                 }
             }
+            String fileName = new File(documentGuid).getName();
+            String path = annotationConfiguration.getOutputDirectory() + File.separator + fileName;
             // check if annotations array contains at least one annotation to add
             if (annotations.size() > 0) {
                 // Add annotation to the document
                 int type = getDocumentType(documentType);
                 // Save result stream to file.
-                String fileName = new File(documentGuid).getName();
-                String path = annotationConfiguration.getOutputDirectory() + File.separator + fileName;
-                try (InputStream cleanDoc = new FileInputStream(documentGuid);
-                     InputStream result = getAnnotationImageHandler().exportAnnotationsToDocument(cleanDoc, annotations, type);
-                     OutputStream fileStream = new FileOutputStream(path)) {
+                file = getAnnotationImageHandler().exportAnnotationsToDocument(file, annotations, type);
+            }
 
-                    IOUtils.copyLarge(result, fileStream);
-                }
+            (new File(path)).delete();
+            try (OutputStream fileStream = new FileOutputStream(path)) {
+                IOUtils.copyLarge(file, fileStream);
                 annotatedDocument.setGuid(path);
-            } else if (exc != null) {
-                throw new UnsupportedOperationException(exc.getMessage(), exc);
             }
         } catch (Exception ex) {
             throw new TotalGroupDocsException(ex.getMessage(), ex);
@@ -331,7 +330,7 @@ public class AnnotationServiceImpl implements AnnotationService {
         return annotatedDocument;
     }
 
-    public String parseFileExtension(String documentGuid) {
+    private String parseFileExtension(String documentGuid) {
         String extension = FilenameUtils.getExtension(documentGuid);
         return extension == null ? null : extension.toLowerCase();
     }
