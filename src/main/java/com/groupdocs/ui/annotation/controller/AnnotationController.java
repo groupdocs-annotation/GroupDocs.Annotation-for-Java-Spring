@@ -2,9 +2,7 @@ package com.groupdocs.ui.annotation.controller;
 
 import com.groupdocs.ui.annotation.config.AnnotationConfiguration;
 import com.groupdocs.ui.annotation.entity.request.AnnotateDocumentRequest;
-import com.groupdocs.ui.annotation.entity.request.TextCoordinatesRequest;
 import com.groupdocs.ui.annotation.entity.web.AnnotatedDocumentEntity;
-import com.groupdocs.ui.annotation.entity.web.TextRowEntity;
 import com.groupdocs.ui.annotation.service.AnnotationService;
 import com.groupdocs.ui.exception.TotalGroupDocsException;
 import com.groupdocs.ui.model.request.FileTreeRequest;
@@ -153,18 +151,6 @@ public class AnnotationController {
         UploadedDocumentEntity uploadedDocument = new UploadedDocumentEntity();
         uploadedDocument.setGuid(pathname);
         return uploadedDocument;
-    }
-
-    /**
-     * Get text coordinates
-     *
-     * @param textCoordinatesRequest
-     * @return list of each text row with coordinates
-     */
-    @RequestMapping(value = "/textCoordinates", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<TextRowEntity> textCoordinates(@RequestBody TextCoordinatesRequest textCoordinatesRequest) {
-        return annotationService.getTextCoordinates(textCoordinatesRequest);
     }
 
     /**
