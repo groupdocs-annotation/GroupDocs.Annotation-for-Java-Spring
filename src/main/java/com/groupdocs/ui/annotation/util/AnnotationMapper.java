@@ -59,7 +59,9 @@ public class AnnotationMapper {
         annotation.setTop(box.getY());
         annotation.setWidth(box.getWidth());
         annotation.setPageNumber(annotationInfo.getPageNumber() + 1);
-        annotation.setSvgPath(annotationInfo.getSvgPath());
+        if (annotationInfo.getSvgPath() != null) {
+            annotation.setSvgPath(annotationInfo.getSvgPath().replace("l", "L"));
+        }
         String text = (annotationInfo.getText() == null) ? annotationInfo.getFieldText() : annotationInfo.getText();
         annotation.setText(text);
         annotation.setType(AnnotationTypes.instance.getAnnotationType(annotationInfo.getType()));

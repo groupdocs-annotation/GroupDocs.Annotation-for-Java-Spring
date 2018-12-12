@@ -1,6 +1,9 @@
 package com.groupdocs.ui.annotation.annotator;
 
-import com.groupdocs.annotation.domain.*;
+import com.groupdocs.annotation.domain.AnnotationInfo;
+import com.groupdocs.annotation.domain.AnnotationType;
+import com.groupdocs.annotation.domain.PageData;
+import com.groupdocs.annotation.domain.Point;
 import com.groupdocs.ui.annotation.entity.web.AnnotationDataEntity;
 
 import java.text.ParseException;

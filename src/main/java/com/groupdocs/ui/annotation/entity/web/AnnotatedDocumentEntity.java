@@ -1,7 +1,6 @@
 package com.groupdocs.ui.annotation.entity.web;
 
 import com.groupdocs.ui.model.request.LoadDocumentRequest;
-import com.groupdocs.ui.model.response.DocumentDescriptionEntity;
 
 /**
  * AnnotatedDocumentEntity
@@ -20,7 +19,10 @@ public class AnnotatedDocumentEntity extends LoadDocumentRequest {
     private double width;
     private double height;
     private int number;
-
+    /**
+     * List of supported types of annotations
+     */
+    public String[] supportedAnnotations;
 
     public AnnotationDataEntity[] getAnnotations() {
         return annotations;
@@ -58,4 +60,11 @@ public class AnnotatedDocumentEntity extends LoadDocumentRequest {
         this.number = number;
     }
 
+    public String[] getSupportedAnnotations() {
+        return supportedAnnotations;
+    }
+
+    public void setSupportedAnnotations(String[] supportedAnnotations) {
+        this.supportedAnnotations = supportedAnnotations;
+    }
 }
