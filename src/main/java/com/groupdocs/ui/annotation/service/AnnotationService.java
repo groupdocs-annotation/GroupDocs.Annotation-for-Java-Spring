@@ -42,9 +42,9 @@ public interface AnnotationService {
      * Get document information
      *
      * @param loadDocumentRequest request object with document guid
-     * @return list of pages of requested document
+     * @return document with list of pages
      */
-    List<AnnotatedDocumentEntity> getDocumentDescription(LoadDocumentRequest loadDocumentRequest);
+    AnnotatedDocumentEntity getDocumentDescription(LoadDocumentRequest loadDocumentRequest);
 
     /**
      * Load document page

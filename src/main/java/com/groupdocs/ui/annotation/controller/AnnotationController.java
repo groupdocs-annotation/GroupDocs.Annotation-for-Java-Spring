@@ -81,7 +81,7 @@ public class AnnotationController {
      */
     @RequestMapping(value = "/loadDocumentDescription", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<AnnotatedDocumentEntity> loadDocumentDescription(@RequestBody LoadDocumentRequest loadDocumentRequest) {
+    public AnnotatedDocumentEntity loadDocumentDescription(@RequestBody LoadDocumentRequest loadDocumentRequest) {
         return annotationService.getDocumentDescription(loadDocumentRequest);
     }
 
