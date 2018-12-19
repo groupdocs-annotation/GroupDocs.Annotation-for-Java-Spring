@@ -273,7 +273,6 @@ public class AnnotationServiceImpl implements AnnotationService {
                 // Save result stream to fileInputStream.
                 fileInputStream = getAnnotationImageHandler().exportAnnotationsToDocument(fileInputStream, annotations, type);
             }
-            (new File(documentGuid)).delete();
             try (OutputStream fileStream = new FileOutputStream(documentGuid)) {
                 IOUtils.copyLarge(fileInputStream, fileStream);
                 annotatedDocument.setGuid(documentGuid);
