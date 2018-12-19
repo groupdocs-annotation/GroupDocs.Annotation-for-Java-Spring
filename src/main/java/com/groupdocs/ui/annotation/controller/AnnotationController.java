@@ -100,26 +100,19 @@ public class AnnotationController {
      * Download document
      *
      * @param documentGuid path to document parameter
-     * @param annotated    mark, annotated document or not
      * @param response     http response
      */
     @RequestMapping(value = "/downloadDocument", method = RequestMethod.GET)
     public void downloadDocument(@RequestParam("path") String documentGuid,
-                                 @RequestParam("annotated") Boolean annotated,
                                  HttpServletResponse response) {
         // get document path
         String fileName = FilenameUtils.getName(documentGuid);
-        // choose directory
-        AnnotationConfiguration annotationConfiguration = annotationService.getAnnotationConfiguration();
-        String pathToDownload = annotated ?
-                String.format("%s%s%s", annotationConfiguration.getOutputDirectory(), File.separator, fileName) :
-                documentGuid;
 
         // set response content info
         Utils.addFileDownloadHeaders(response, fileName, null);
 
         long length;
-        try (InputStream inputStream = new BufferedInputStream(new FileInputStream(pathToDownload));
+        try (InputStream inputStream = new BufferedInputStream(new FileInputStream(documentGuid));
              ServletOutputStream outputStream = response.getOutputStream()) {
             // download the document
             length = IOUtils.copyLarge(inputStream, outputStream);

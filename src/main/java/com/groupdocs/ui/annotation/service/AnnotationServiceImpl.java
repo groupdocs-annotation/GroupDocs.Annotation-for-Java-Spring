@@ -63,8 +63,6 @@ public class AnnotationServiceImpl implements AnnotationService {
 
     @PostConstruct
     public void init() {
-        // init output directory
-        initOutputDirectory();
         // create annotation application configuration
         AnnotationConfig config = new AnnotationConfig();
         // set storage path
@@ -79,16 +77,6 @@ public class AnnotationServiceImpl implements AnnotationService {
             license.setLicense(globalConfiguration.getApplication().getLicensePath());
         } catch (Throwable exc) {
             logger.error("Can not verify Annotation license!");
-        }
-    }
-
-    private void initOutputDirectory() {
-        if(StringUtils.isEmpty(annotationConfiguration.getOutputDirectory())) {
-            String outputDirectory = String.format("%s%s", annotationConfiguration.getFilesDirectory(), OUTPUT_FOLDER);
-            annotationConfiguration.setOutputDirectory(outputDirectory);
-        }
-        if(!new File(annotationConfiguration.getOutputDirectory()).exists()) {
-            new File(annotationConfiguration.getOutputDirectory()).mkdirs();
         }
     }
 
@@ -266,34 +254,29 @@ public class AnnotationServiceImpl implements AnnotationService {
             }
             // initiate list of annotations to add
             List<AnnotationInfo> annotations = new ArrayList<>();
-            InputStream file = new FileInputStream(documentGuid);
-            file = getAnnotationImageHandler().removeAnnotationStream(file);
-            Throwable exc = null;
+            InputStream fileInputStream = new FileInputStream(documentGuid);
+            fileInputStream = getAnnotationImageHandler().removeAnnotationStream(fileInputStream);
             for (AnnotationDataEntity annotationData : annotationsData) {
                 // create annotator
                 PageData pageData = documentInfo.getPages().get(annotationData.getPageNumber() - 1);
                 // add annotation, if current annotation type isn't supported by the current document type it will be ignored
                 try {
                     annotations.add(AnnotatorFactory.createAnnotator(annotationData, pageData).getAnnotationInfo(documentType));
-                } catch (UnsupportedOperationException ex) {
-                    exc = ex;
                 } catch (Exception ex) {
                     throw new TotalGroupDocsException(ex.getMessage(), ex);
                 }
             }
-            String fileName = new File(documentGuid).getName();
-            String path = annotationConfiguration.getOutputDirectory() + File.separator + fileName;
             // check if annotations array contains at least one annotation to add
             if (annotations.size() > 0) {
                 // Add annotation to the document
                 int type = getDocumentType(documentType);
-                // Save result stream to file.
-                file = getAnnotationImageHandler().exportAnnotationsToDocument(file, annotations, type);
+                // Save result stream to fileInputStream.
+                fileInputStream = getAnnotationImageHandler().exportAnnotationsToDocument(fileInputStream, annotations, type);
             }
-            (new File(path)).delete();
-            try (OutputStream fileStream = new FileOutputStream(path)) {
-                IOUtils.copyLarge(file, fileStream);
-                annotatedDocument.setGuid(path);
+            (new File(documentGuid)).delete();
+            try (OutputStream fileStream = new FileOutputStream(documentGuid)) {
+                IOUtils.copyLarge(fileInputStream, fileStream);
+                annotatedDocument.setGuid(documentGuid);
             }
         } catch (Exception ex) {
             throw new TotalGroupDocsException(ex.getMessage(), ex);
