@@ -74,12 +74,12 @@ mvn clean spring-boot:run
 
 ## Binary release (with all dependencies)
 
-Download [latest release](https://github.com/groupdocs-annotation/GroupDocs.Viewer-for-Java-Spring/releases/latest) from [releases page](https://github.com/groupdocs-annotation/GroupDocs.Viewer-for-Java-Spring/releases). 
+Download [latest release](https://github.com/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring/releases/latest) from [releases page](https://github.com/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring/releases). 
 
 **Note**: This method is **recommended** for running this sample behind firewall.
 
 ```bash
-curl -J -L -o release.tar.gz https://github.com/groupdocs-annotation/GroupDocs.Viewer-for-Java-Spring/releases/download/1.14.0/release.tar.gz
+curl -J -L -o release.tar.gz https://github.com/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring/releases/download/1.12.0/release.tar.gz
 tar -xvzf release.tar.gz
 cd release
 java -jar annotation-spring-1.12.0.jar configuration.yaml
