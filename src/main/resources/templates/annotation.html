@@ -31,25 +31,18 @@
 <div id="element"></div>
 <script th:inline="javascript">
     /*<![CDATA[*/
-    $('#element').viewer({
+    $('#element').annotation({
         /*[+
         applicationPath: 'http://' + [[${globalConfiguration.server.hostAddress}]] + ':' + [[${globalConfiguration.server.httpPort}]] + '/annotation',
         +]*/
         defaultDocument: /*[[${annotationConfiguration.defaultDocument}]]*/'',
-        htmlMode: false,
         preloadPageCount: /*[[${annotationConfiguration.preloadPageCount}]]*/'',
-        zoom : false,
         pageSelector: /*[[${annotationConfiguration.pageSelector}]]*/'',
-        search: false,
-        thumbnails: false,
-        rotate: false,
         download: /*[[${annotationConfiguration.download}]]*/'',
         upload: /*[[${annotationConfiguration.upload}]]*/'',
         print: /*[[${annotationConfiguration.print}]]*/'',
         browse: /*[[${annotationConfiguration.browse}]]*/'',
         rewrite: /*[[${annotationConfiguration.rewrite}]]*/'',
-    });
-    $('#element').annotation({
         textAnnotation: /*[[${annotationConfiguration.textAnnotation}]]*/'',
         areaAnnotation: /*[[${annotationConfiguration.areaAnnotation}]]*/'',
         pointAnnotation: /*[[${annotationConfiguration.pointAnnotation}]]*/'',
