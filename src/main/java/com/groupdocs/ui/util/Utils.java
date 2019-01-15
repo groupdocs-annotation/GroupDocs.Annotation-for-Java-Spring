@@ -24,10 +24,22 @@ import java.util.Map;
 import static org.springframework.http.HttpHeaders.CONTENT_LENGTH;
 
 public class Utils {
+
     private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 
     public static final FileNameComparator FILE_NAME_COMPARATOR = new FileNameComparator();
     public static final FileTypeComparator FILE_TYPE_COMPARATOR = new FileTypeComparator();
+
+    /**
+     * Parse extension of the file's name
+     *
+     * @param documentGuid path to file
+     * @return extension of the file's name
+     */
+    public static String parseFileExtension(String documentGuid) {
+        String extension = FilenameUtils.getExtension(documentGuid);
+        return extension == null ? null : extension.toLowerCase();
+    }
 
     /**
      * Fill header HTTP response with file data
