@@ -3,12 +3,12 @@ package com.groupdocs.ui.annotation.service;
 import com.groupdocs.ui.annotation.config.AnnotationConfiguration;
 import com.groupdocs.ui.annotation.entity.request.AnnotateDocumentRequest;
 import com.groupdocs.ui.annotation.entity.web.AnnotatedDocumentEntity;
+import com.groupdocs.ui.annotation.entity.web.AnnotationPageDescriptionEntity;
 import com.groupdocs.ui.config.GlobalConfiguration;
 import com.groupdocs.ui.model.request.FileTreeRequest;
 import com.groupdocs.ui.model.request.LoadDocumentPageRequest;
 import com.groupdocs.ui.model.request.LoadDocumentRequest;
 import com.groupdocs.ui.model.response.FileDescriptionEntity;
-import com.groupdocs.ui.model.response.LoadedPageEntity;
 
 import java.util.List;
 
@@ -52,7 +52,7 @@ public interface AnnotationService {
      * @param loadDocumentPageRequest request object with document guid and page number
      * @return document page data
      */
-    LoadedPageEntity getDocumentPage(LoadDocumentPageRequest loadDocumentPageRequest);
+    AnnotationPageDescriptionEntity getDocumentPage(LoadDocumentPageRequest loadDocumentPageRequest);
 
     /**
      * Annotate document

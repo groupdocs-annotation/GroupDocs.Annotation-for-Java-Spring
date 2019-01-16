@@ -2,12 +2,8 @@ package com.groupdocs.ui.annotation.entity.web;
 
 import com.groupdocs.ui.model.response.PageDescriptionEntity;
 
-public class PageDataDescriptionEntity extends PageDescriptionEntity {
-    /**
-     * Annotation data
-     */
-    // TODO: remove once perf. issue is fixed
-    private String data;
+public class AnnotationPageDescriptionEntity extends PageDescriptionEntity {
+
     /**
      * List of annotation data
      */
@@ -21,11 +17,4 @@ public class PageDataDescriptionEntity extends PageDescriptionEntity {
         this.annotations = annotations;
     }
 
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
 }
