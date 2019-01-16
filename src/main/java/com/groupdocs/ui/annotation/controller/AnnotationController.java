@@ -3,13 +3,13 @@ package com.groupdocs.ui.annotation.controller;
 import com.groupdocs.ui.annotation.config.AnnotationConfiguration;
 import com.groupdocs.ui.annotation.entity.request.AnnotateDocumentRequest;
 import com.groupdocs.ui.annotation.entity.web.AnnotatedDocumentEntity;
+import com.groupdocs.ui.annotation.entity.web.AnnotationPageDescriptionEntity;
 import com.groupdocs.ui.annotation.service.AnnotationService;
 import com.groupdocs.ui.exception.TotalGroupDocsException;
 import com.groupdocs.ui.model.request.FileTreeRequest;
 import com.groupdocs.ui.model.request.LoadDocumentPageRequest;
 import com.groupdocs.ui.model.request.LoadDocumentRequest;
 import com.groupdocs.ui.model.response.FileDescriptionEntity;
-import com.groupdocs.ui.model.response.LoadedPageEntity;
 import com.groupdocs.ui.model.response.UploadedDocumentEntity;
 import com.groupdocs.ui.util.Utils;
 import org.apache.commons.io.FilenameUtils;
@@ -92,7 +92,7 @@ public class AnnotationController {
      */
     @RequestMapping(value = "/loadDocumentPage", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public LoadedPageEntity loadDocumentPage(@RequestBody LoadDocumentPageRequest loadDocumentPageRequest) {
+    public AnnotationPageDescriptionEntity loadDocumentPage(@RequestBody LoadDocumentPageRequest loadDocumentPageRequest) {
         return annotationService.getDocumentPage(loadDocumentPageRequest);
     }
 

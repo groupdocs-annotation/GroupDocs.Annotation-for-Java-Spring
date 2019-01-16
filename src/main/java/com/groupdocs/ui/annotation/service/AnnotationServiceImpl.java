@@ -17,7 +17,7 @@ import com.groupdocs.ui.annotation.config.AnnotationConfiguration;
 import com.groupdocs.ui.annotation.entity.request.AnnotateDocumentRequest;
 import com.groupdocs.ui.annotation.entity.web.AnnotatedDocumentEntity;
 import com.groupdocs.ui.annotation.entity.web.AnnotationDataEntity;
-import com.groupdocs.ui.annotation.entity.web.PageDataDescriptionEntity;
+import com.groupdocs.ui.annotation.entity.web.AnnotationPageDescriptionEntity;
 import com.groupdocs.ui.annotation.importer.Importer;
 import com.groupdocs.ui.annotation.util.AnnotationMapper;
 import com.groupdocs.ui.annotation.util.SupportedAnnotations;
@@ -27,7 +27,6 @@ import com.groupdocs.ui.model.request.FileTreeRequest;
 import com.groupdocs.ui.model.request.LoadDocumentPageRequest;
 import com.groupdocs.ui.model.request.LoadDocumentRequest;
 import com.groupdocs.ui.model.response.FileDescriptionEntity;
-import com.groupdocs.ui.model.response.LoadedPageEntity;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -45,6 +44,7 @@ import java.util.List;
 import static com.groupdocs.ui.annotation.util.DocumentTypesConverter.checkedDocumentType;
 import static com.groupdocs.ui.annotation.util.DocumentTypesConverter.getDocumentType;
 import static com.groupdocs.ui.annotation.util.PathConstants.OUTPUT_FOLDER;
+import static com.groupdocs.ui.util.Utils.getStringFromStream;
 
 @Service
 public class AnnotationServiceImpl implements AnnotationService {
@@ -143,13 +143,9 @@ public class AnnotationServiceImpl implements AnnotationService {
             // get/set parameters
             String documentGuid = loadDocumentRequest.getGuid();
             String password = loadDocumentRequest.getPassword();
-            ImageOptions imageOptions = new ImageOptions();
-            // set password for protected document
-            if (!password.isEmpty()) {
-                imageOptions.setPassword(password);
-            }
+            ImageOptions imageOptions = createImageOptions(password);
             // get document info container
-            String fileName = new File(documentGuid).getName();
+            String fileName = FilenameUtils.getName(documentGuid);
             DocumentInfoContainer documentDescription = annotationHandler.getDocumentInfo(fileName, password);
 
             String documentType = checkedDocumentType(documentGuid, documentDescription.getDocumentType());
@@ -157,8 +153,6 @@ public class AnnotationServiceImpl implements AnnotationService {
             AnnotationInfo[] annotations = getAnnotations(documentGuid, documentType);
             // get info about each document page
             List<PageImage> pageImages = null;
-            List<PageData> pages = documentDescription.getPages();
-            // TODO: remove once perf. issue is fixed
             if (annotationConfiguration.getPreloadPageCount() == 0) {
                 pageImages = annotationHandler.getPages(fileName, imageOptions);
             }
@@ -168,23 +162,16 @@ public class AnnotationServiceImpl implements AnnotationService {
             description.setGuid(documentGuid);
             description.setSupportedAnnotations(supportedAnnotations);
             // initiate pages description list
-            List<PageDataDescriptionEntity> pagesDescriptions = new ArrayList<>();
+            List<PageData> pages = documentDescription.getPages();
+            List<AnnotationPageDescriptionEntity> pagesDescriptions = new ArrayList<>(pages.size());
             for (int i = 0; i < pages.size(); i++) {
-                // set current page info for result
                 PageData pageData = pages.get(i);
-                PageDataDescriptionEntity page = new PageDataDescriptionEntity();
-                page.setHeight(pageData.getHeight());
-                page.setWidth(pageData.getWidth());
-                page.setNumber(pageData.getNumber());
+                // set current page info for result
+                PageImage pageImage = pageImages != null ? pageImages.get(i) : null;
+                AnnotationPageDescriptionEntity page = getAnnotationPageDescriptionEntity(pageData, pageImage);
                 // set annotations data if document page contains annotations
                 if (annotations != null && annotations.length > 0) {
                     page.setAnnotations(AnnotationMapper.instance.mapForPage(annotations, page.getNumber()));
-                }
-                // TODO: remove once perf. issue is fixed
-                if (pageImages != null) {
-                    byte[] bytes = IOUtils.toByteArray(pageImages.get(i).getStream());
-                    String encodedImage = Base64.getEncoder().encodeToString(bytes);
-                    page.setData(encodedImage);
                 }
                 pagesDescriptions.add(page);
             }
@@ -196,33 +183,54 @@ public class AnnotationServiceImpl implements AnnotationService {
         }
     }
 
+    /**
+     * Create initial instance of ImageOptions with documents password
+     *
+     * @param password
+     * @return
+     */
+    public ImageOptions createImageOptions(String password) {
+        ImageOptions imageOptions = new ImageOptions();
+        // set password for protected document
+        if (!password.isEmpty()) {
+            imageOptions.setPassword(password);
+        }
+        return imageOptions;
+    }
+
+    private AnnotationPageDescriptionEntity getAnnotationPageDescriptionEntity(PageData pageData, PageImage pageImage) throws IOException {
+        AnnotationPageDescriptionEntity page = new AnnotationPageDescriptionEntity();
+        page.setHeight(pageData.getHeight());
+        page.setWidth(pageData.getWidth());
+        page.setNumber(pageData.getNumber());
+
+        if (pageImage != null) {
+            page.setData(getStringFromStream(pageImage.getStream()));
+        }
+        return page;
+    }
+
     @Override
-    public LoadedPageEntity getDocumentPage(LoadDocumentPageRequest loadDocumentPageRequest) {
+    public AnnotationPageDescriptionEntity getDocumentPage(LoadDocumentPageRequest loadDocumentPageRequest) {
         try {
             // get/set parameters
             String documentGuid = loadDocumentPageRequest.getGuid();
             int pageNumber = loadDocumentPageRequest.getPage();
             String password = loadDocumentPageRequest.getPassword();
             // set options
-            ImageOptions imageOptions = new ImageOptions();
+            ImageOptions imageOptions = createImageOptions(password);
             imageOptions.setPageNumber(pageNumber);
             imageOptions.setCountPagesToConvert(1);
-            // set password for protected document
-            if (!password.isEmpty()) {
-                imageOptions.setPassword(password);
-            }
-            // get page image
-            String fileName = new File(documentGuid).getName();
+            String fileName = FilenameUtils.getName(documentGuid);
             List<PageImage> images = annotationHandler.getPages(fileName, imageOptions);
 
-            byte[] bytes = IOUtils.toByteArray(images.get(pageNumber - 1).getStream());
-            // encode ByteArray into String
-            String encodedImage = Base64.getEncoder().encodeToString(bytes);
+            DocumentInfoContainer documentDescription = annotationHandler.getDocumentInfo(fileName, password);
+            PageData pageData = documentDescription.getPages().get(pageNumber - 1);
 
-            // loaded page object
-            LoadedPageEntity loadedPage = new LoadedPageEntity();
-            loadedPage.setPageImage(encodedImage);
-            return loadedPage;
+            AnnotationPageDescriptionEntity page = getAnnotationPageDescriptionEntity(pageData, images.get(pageNumber - 1));
+
+            // return loaded page object
+            return page;
         } catch (Exception ex) {
             throw new TotalGroupDocsException(ex.getMessage(), ex);
         }
@@ -266,7 +274,7 @@ public class AnnotationServiceImpl implements AnnotationService {
             }
             (new File(path)).delete();
             if (annotateDocumentRequest.getPrint()) {
-                List<PageDataDescriptionEntity> annotatedPages = getAnnotatedPages(password, file);
+                List<AnnotationPageDescriptionEntity> annotatedPages = getAnnotatedPages(password, file);
                 annotatedDocument.setPages(annotatedPages);
                 (new File(path)).delete();
             } else {
@@ -289,19 +297,13 @@ public class AnnotationServiceImpl implements AnnotationService {
      * @return list of pages
      * @throws IOException
      */
-    private List<PageDataDescriptionEntity> getAnnotatedPages(String password, InputStream inputStream) throws IOException {
-        ImageOptions imageOptions = new ImageOptions();
-        // set password for protected document
-        if (!password.isEmpty()) {
-            imageOptions.setPassword(password);
-        }
+    private List<AnnotationPageDescriptionEntity> getAnnotatedPages(String password, InputStream inputStream) throws IOException {
+        ImageOptions imageOptions = createImageOptions(password);
         List<PageImage> pages = annotationHandler.getPages(inputStream, imageOptions);
-        List<PageDataDescriptionEntity> pagesDescriptions = new ArrayList<>(pages.size());
+        List<AnnotationPageDescriptionEntity> pagesDescriptions = new ArrayList<>(pages.size());
         for (PageImage pageImage : pages) {
-            byte[] bytes = IOUtils.toByteArray(pageImage.getStream());
-            String encodedImage = Base64.getEncoder().encodeToString(bytes);
-            PageDataDescriptionEntity page = new PageDataDescriptionEntity();
-            page.setData(encodedImage);
+            AnnotationPageDescriptionEntity page = new AnnotationPageDescriptionEntity();
+            page.setData(getStringFromStream(pageImage.getStream()));
 
             pagesDescriptions.add(page);
         }
