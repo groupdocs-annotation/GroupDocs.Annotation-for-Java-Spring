@@ -2,6 +2,7 @@ package com.groupdocs.ui.util;
 
 import com.groupdocs.ui.exception.TotalGroupDocsException;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +26,23 @@ import java.util.Map;
 import static org.springframework.http.HttpHeaders.CONTENT_LENGTH;
 
 public class Utils {
-
     private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 
     public static final FileNameComparator FILE_NAME_COMPARATOR = new FileNameComparator();
     public static final FileTypeComparator FILE_TYPE_COMPARATOR = new FileTypeComparator();
+
+    /**
+     * Read stream and convert to string
+     *
+     * @param inputStream
+     * @return
+     * @throws IOException
+     */
+    public static String getStringFromStream(InputStream inputStream) throws IOException {
+        byte[] bytes = IOUtils.toByteArray(inputStream);
+        // encode ByteArray into String
+        return Base64.getEncoder().encodeToString(bytes);
+    }
 
     /**
      * Parse extension of the file's name

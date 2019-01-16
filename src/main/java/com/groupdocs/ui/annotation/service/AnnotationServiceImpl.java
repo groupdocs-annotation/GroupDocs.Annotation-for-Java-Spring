@@ -44,6 +44,7 @@ import java.util.List;
 import static com.groupdocs.ui.annotation.util.DocumentTypesConverter.checkedDocumentType;
 import static com.groupdocs.ui.annotation.util.DocumentTypesConverter.getDocumentType;
 import static com.groupdocs.ui.annotation.util.PathConstants.OUTPUT_FOLDER;
+import static com.groupdocs.ui.util.Utils.getStringFromStream;
 
 @Service
 public class AnnotationServiceImpl implements AnnotationService {
@@ -204,9 +205,7 @@ public class AnnotationServiceImpl implements AnnotationService {
         page.setNumber(pageData.getNumber());
 
         if (pageImage != null) {
-            byte[] bytes = IOUtils.toByteArray(pageImage.getStream());
-            String encodedImage = Base64.getEncoder().encodeToString(bytes);
-            page.setData(encodedImage);
+            page.setData(getStringFromStream(pageImage.getStream()));
         }
         return page;
     }
@@ -303,10 +302,8 @@ public class AnnotationServiceImpl implements AnnotationService {
         List<PageImage> pages = annotationHandler.getPages(inputStream, imageOptions);
         List<AnnotationPageDescriptionEntity> pagesDescriptions = new ArrayList<>(pages.size());
         for (PageImage pageImage : pages) {
-            byte[] bytes = IOUtils.toByteArray(pageImage.getStream());
-            String encodedImage = Base64.getEncoder().encodeToString(bytes);
             AnnotationPageDescriptionEntity page = new AnnotationPageDescriptionEntity();
-            page.setData(encodedImage);
+            page.setData(getStringFromStream(pageImage.getStream()));
 
             pagesDescriptions.add(page);
         }
