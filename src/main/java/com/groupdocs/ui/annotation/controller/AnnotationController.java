@@ -5,6 +5,7 @@ import com.groupdocs.ui.annotation.entity.request.AnnotateDocumentRequest;
 import com.groupdocs.ui.annotation.entity.web.AnnotatedDocumentEntity;
 import com.groupdocs.ui.annotation.entity.web.AnnotationPageDescriptionEntity;
 import com.groupdocs.ui.annotation.service.AnnotationService;
+import com.groupdocs.ui.config.GlobalConfiguration;
 import com.groupdocs.ui.exception.TotalGroupDocsException;
 import com.groupdocs.ui.model.request.FileTreeRequest;
 import com.groupdocs.ui.model.request.LoadDocumentPageRequest;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Nullable;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -31,6 +33,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import static com.groupdocs.ui.util.Utils.setLocalPort;
 import static com.groupdocs.ui.util.Utils.uploadFile;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -51,14 +54,21 @@ public class AnnotationController {
     /**
      * Get annotation page
      *
+     * @param request
      * @param model model data for template
      * @return template name
      */
     @RequestMapping(method = RequestMethod.GET)
-    public String getView(Map<String, Object> model) {
-        model.put("globalConfiguration", annotationService.getGlobalConfiguration());
-        logger.debug("annotation config: {}", annotationService.getAnnotationConfiguration());
-        model.put("annotationConfiguration", annotationService.getAnnotationConfiguration());
+    public String getView(HttpServletRequest request, Map<String, Object> model) {
+        GlobalConfiguration globalConfiguration = annotationService.getGlobalConfiguration();
+
+        setLocalPort(request, globalConfiguration.getServer());
+
+        model.put("globalConfiguration", globalConfiguration);
+
+        AnnotationConfiguration annotationConfiguration = annotationService.getAnnotationConfiguration();
+        logger.debug("annotation config: {}", annotationConfiguration);
+        model.put("annotationConfiguration", annotationConfiguration);
         return "annotation";
     }
 

@@ -1,5 +1,6 @@
 package com.groupdocs.ui.util;
 
+import com.groupdocs.ui.config.ServerConfiguration;
 import com.groupdocs.ui.exception.TotalGroupDocsException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +32,18 @@ public class Utils {
 
     public static final FileNameComparator FILE_NAME_COMPARATOR = new FileNameComparator();
     public static final FileTypeComparator FILE_TYPE_COMPARATOR = new FileTypeComparator();
+
+    /**
+     * Set local port from request to config
+     *
+     * @param request
+     * @param server
+     */
+    public static void setLocalPort(HttpServletRequest request, ServerConfiguration server) {
+        if (server.getHttpPort() == null) {
+            server.setHttpPort(request.getLocalPort());
+        }
+    }
 
     /**
      * Read stream and convert to string
