@@ -224,6 +224,20 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Example of usage tomcat7 plugin for deploying
+             for deploying/undeploying use war profile '-P war',
+             for example: 'mvn -P war tomcat7:deploy'-->
+            <!--
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <url>http://localhost:8080/manager/text</url>
+                    <server>TomcatServer</server>
+                    <path>/app</path>
+                </configuration>
+            </plugin>-->
         </plugins>
     </build>
 </project>
