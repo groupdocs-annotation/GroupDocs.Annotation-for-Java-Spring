@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
@@ -21,9 +20,6 @@ public class ServerConfiguration {
 
     @PostConstruct
     public void init() {
-        if (StringUtils.isEmpty(applicationContextPath)) {
-            applicationContextPath = "/";
-        }
         try {
             hostAddress = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
