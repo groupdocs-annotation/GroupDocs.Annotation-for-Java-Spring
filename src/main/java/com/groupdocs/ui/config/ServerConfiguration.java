@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
@@ -14,17 +15,20 @@ public class ServerConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(ServerConfiguration.class);
 
     private Integer httpPort;
+    @Value("${server.hostAddress}")
     private String hostAddress;
     @Value("#{servletContext.contextPath}")
     private String applicationContextPath;
 
     @PostConstruct
     public void init() {
-        try {
-            hostAddress = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            logger.error("Can not get host address ", e);
-            hostAddress = "localhost";
+        if (StringUtils.isEmpty(hostAddress)) {
+            try {
+                hostAddress = InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                logger.error("Can not get host address ", e);
+                hostAddress = "localhost";
+            }
         }
     }
 
