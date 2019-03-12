@@ -7,13 +7,17 @@ server:
     # Is is not possible to change port for deploying application on external server
     port: 8080
 
+
 ################################################
 # Application (global) configurations
 ################################################
 application:
   # License path
   # Absolute path to GroupDocs license file
-  licensePath:  
+  licensePath:
+  # Host name or ip for server instance
+  hostAddress:
+
 
 ################################################
 # Common configurations
