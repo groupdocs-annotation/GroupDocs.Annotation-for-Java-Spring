@@ -78,6 +78,12 @@ public class AnnotationConfiguration extends CommonConfiguration {
     @Value("#{new Boolean('${annotation.downloadAnnotated}')}")
     private boolean downloadAnnotated;
 
+    @Value("#{new Boolean('${annotation.zoom}')}")
+    private boolean zoom;
+
+    @Value("#{new Boolean('${annotation.fitWidth}')}")
+    private boolean fitWidth;
+
     @PostConstruct
     public void init() {
         this.filesDirectory = StringUtils.isEmpty(this.filesDirectory) ? defaultAnnotationDirectory() : relativePathToAbsolute(this.filesDirectory);
@@ -243,6 +249,22 @@ public class AnnotationConfiguration extends CommonConfiguration {
         this.downloadAnnotated = downloadAnnotated;
     }
 
+    public boolean getZoom() {
+        return zoom;
+    }
+
+    public void setZoom(boolean zoom) {
+        this.zoom = zoom;
+    }
+
+    public boolean getFitWidth() {
+        return fitWidth;
+    }
+
+    public void setFitWidth(boolean fitWidth) {
+        this.fitWidth = fitWidth;
+    }
+
     @Override
     public String toString() {
         return super.toString() +
@@ -267,6 +289,8 @@ public class AnnotationConfiguration extends CommonConfiguration {
                 ", distanceAnnotation=" + distanceAnnotation +
                 ", downloadOriginal=" + downloadOriginal +
                 ", downloadAnnotated=" + downloadAnnotated +
+                ", zoom=" + zoom +
+                ", fitWidth=" + fitWidth +
                 '}';
     }
 }
