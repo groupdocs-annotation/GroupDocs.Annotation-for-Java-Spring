@@ -156,7 +156,6 @@ public class AnnotationController {
         return uploadedDocument;
     }
 
-
     /**
      * Annotate document with annotations and download result without saving
      *
@@ -183,7 +182,6 @@ public class AnnotationController {
             logger.error("Exception in downloading document", ex);
             throw new TotalGroupDocsException(ex.getMessage(), ex);
         }
-
         Utils.addFileDownloadLengthHeader(response, length);
     }
 

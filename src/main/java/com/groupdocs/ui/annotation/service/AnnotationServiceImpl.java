@@ -246,14 +246,12 @@ public class AnnotationServiceImpl implements AnnotationService {
     }
 
     public InputStream annotateDocument(String documentGuid, String documentType, List<AnnotationInfo> annotations) throws FileNotFoundException {
-        InputStream file = new FileInputStream(documentGuid);
-        file = annotationHandler.removeAnnotationStream(file);
+        InputStream file = annotationHandler.removeAnnotationStream(new FileInputStream(documentGuid));
         // check if annotations array contains at least one annotation to add
         if (annotations.size() > 0) {
             // Add annotation to the document
             int type = getDocumentType(documentType);
-            // Save result stream to file.
-            file = annotationHandler.exportAnnotationsToDocument(file, annotations, type);
+            return annotationHandler.exportAnnotationsToDocument(file, annotations, type);
         }
         return file;
     }
