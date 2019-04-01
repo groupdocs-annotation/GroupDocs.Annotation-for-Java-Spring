@@ -27,9 +27,6 @@ public class AnnotationConfiguration extends CommonConfiguration {
     @Value("#{new Integer('${annotation.preloadPageCount}')}")
     private int preloadPageCount;
 
-    @Value("${annotation.outputDirectory}")
-    private String outputDirectory;
-
     @Value("${annotation.fontsDirectory}")
     private String fontsDirectory;
 
@@ -111,14 +108,6 @@ public class AnnotationConfiguration extends CommonConfiguration {
 
     public void setPreloadPageCount(int preloadPageCount) {
         this.preloadPageCount = preloadPageCount;
-    }
-
-    public String getOutputDirectory() {
-        return outputDirectory;
-    }
-
-    public void setOutputDirectory(String outputDirectory) {
-        this.outputDirectory = outputDirectory;
     }
 
     public String getFontsDirectory() {
@@ -272,7 +261,6 @@ public class AnnotationConfiguration extends CommonConfiguration {
                 "filesDirectory='" + filesDirectory + '\'' +
                 ", defaultDocument='" + defaultDocument + '\'' +
                 ", preloadPageCount=" + preloadPageCount +
-                ", outputDirectory='" + outputDirectory + '\'' +
                 ", fontsDirectory='" + fontsDirectory + '\'' +
                 ", textAnnotation=" + textAnnotation +
                 ", areaAnnotation=" + areaAnnotation +

@@ -10,6 +10,7 @@ import com.groupdocs.ui.model.request.LoadDocumentPageRequest;
 import com.groupdocs.ui.model.request.LoadDocumentRequest;
 import com.groupdocs.ui.model.response.FileDescriptionEntity;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -61,4 +62,12 @@ public interface AnnotationService {
      * @return annotated document
      */
     AnnotatedDocumentEntity annotate(AnnotateDocumentRequest annotateDocumentRequest);
+
+    /**
+     * Annotate document by streams
+     *
+     * @param annotateDocumentRequest request object with document guid and annotations data
+     * @return stream of annotated document
+     */
+    InputStream annotateByStream(AnnotateDocumentRequest annotateDocumentRequest);
 }

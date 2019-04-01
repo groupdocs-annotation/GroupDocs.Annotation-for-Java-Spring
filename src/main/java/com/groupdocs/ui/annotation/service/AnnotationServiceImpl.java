@@ -33,17 +33,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import static com.groupdocs.ui.annotation.util.DocumentTypesConverter.checkedDocumentType;
 import static com.groupdocs.ui.annotation.util.DocumentTypesConverter.getDocumentType;
-import static com.groupdocs.ui.annotation.util.PathConstants.OUTPUT_FOLDER;
 import static com.groupdocs.ui.util.Utils.getStringFromStream;
 
 @Service
@@ -60,8 +57,6 @@ public class AnnotationServiceImpl implements AnnotationService {
 
     @PostConstruct
     public void init() {
-        // init output directory
-        initOutputDirectory();
         // create annotation application configuration
         AnnotationConfig config = new AnnotationConfig();
         // set storage path
@@ -76,16 +71,6 @@ public class AnnotationServiceImpl implements AnnotationService {
             license.setLicense(globalConfiguration.getApplication().getLicensePath());
         } catch (Throwable exc) {
             logger.error("Can not verify Annotation license!");
-        }
-    }
-
-    private void initOutputDirectory() {
-        if (StringUtils.isEmpty(annotationConfiguration.getOutputDirectory())) {
-            String outputDirectory = String.format("%s%s", annotationConfiguration.getFilesDirectory(), OUTPUT_FOLDER);
-            annotationConfiguration.setOutputDirectory(outputDirectory);
-        }
-        if (!new File(annotationConfiguration.getOutputDirectory()).exists()) {
-            new File(annotationConfiguration.getOutputDirectory()).mkdirs();
         }
     }
 
@@ -240,53 +225,67 @@ public class AnnotationServiceImpl implements AnnotationService {
     public AnnotatedDocumentEntity annotate(AnnotateDocumentRequest annotateDocumentRequest) {
         AnnotatedDocumentEntity annotatedDocument = new AnnotatedDocumentEntity();
         try {
-            // get/set parameters
             String documentGuid = annotateDocumentRequest.getGuid();
-            String password = annotateDocumentRequest.getPassword();
-            AnnotationDataEntity[] annotationsData = annotateDocumentRequest.getAnnotationsData();
             String documentType = checkedDocumentType(documentGuid, annotateDocumentRequest.getDocumentType());
-            // initiate AnnotatedDocument object
-            // get document info - required to get document page height and calculate annotation top position
-            DocumentInfoContainer documentInfo = annotationHandler.getDocumentInfo(new File(documentGuid).getName(), password);
-            // initiate list of annotations to add
-            List<AnnotationInfo> annotations = new ArrayList<>();
-            InputStream file = new FileInputStream(documentGuid);
-            file = annotationHandler.removeAnnotationStream(file);
-            for (AnnotationDataEntity annotationData : annotationsData) {
-                // create annotator
-                PageData pageData = documentInfo.getPages().get(annotationData.getPageNumber() - 1);
-                // add annotation, if current annotation type isn't supported by the current document type it will be ignored
-                try {
-                    annotations.add(AnnotatorFactory.createAnnotator(annotationData, pageData).getAnnotationInfo(documentType));
-                } catch (Exception ex) {
-                    throw new TotalGroupDocsException(ex.getMessage(), ex);
-                }
-            }
-            String forPrint = annotateDocumentRequest.getPrint() ? "Temp" : "";
-            String fileName = FilenameUtils.getBaseName(documentGuid) + forPrint + "." + FilenameUtils.getExtension(documentGuid);
-            String path = annotationConfiguration.getOutputDirectory() + File.separator + fileName;
-            // check if annotations array contains at least one annotation to add
-            if (annotations.size() > 0) {
-                // Add annotation to the document
-                int type = getDocumentType(documentType);
-                // Save result stream to file.
-                file = annotationHandler.exportAnnotationsToDocument(file, annotations, type);
-            }
-            (new File(path)).delete();
+            List<AnnotationInfo> annotations = getAnnotationInfos(annotateDocumentRequest, documentType);
+
+            InputStream file = annotateDocument(documentGuid, documentType, annotations);
             if (annotateDocumentRequest.getPrint()) {
-                List<AnnotationPageDescriptionEntity> annotatedPages = getAnnotatedPages(password, file);
+                List<AnnotationPageDescriptionEntity> annotatedPages = getAnnotatedPages(annotateDocumentRequest.getPassword(), file);
                 annotatedDocument.setPages(annotatedPages);
-                (new File(path)).delete();
             } else {
-                try (OutputStream fileStream = new FileOutputStream(path)) {
+                try (OutputStream fileStream = new FileOutputStream(documentGuid)) {
                     IOUtils.copyLarge(file, fileStream);
-                    annotatedDocument.setGuid(path);
+                    annotatedDocument.setGuid(documentGuid);
                 }
             }
         } catch (Exception ex) {
             throw new TotalGroupDocsException(ex.getMessage(), ex);
         }
         return annotatedDocument;
+    }
+
+    public InputStream annotateDocument(String documentGuid, String documentType, List<AnnotationInfo> annotations) throws FileNotFoundException {
+        InputStream file = new FileInputStream(documentGuid);
+        file = annotationHandler.removeAnnotationStream(file);
+        // check if annotations array contains at least one annotation to add
+        if (annotations.size() > 0) {
+            // Add annotation to the document
+            int type = getDocumentType(documentType);
+            // Save result stream to file.
+            file = annotationHandler.exportAnnotationsToDocument(file, annotations, type);
+        }
+        return file;
+    }
+
+    public List<AnnotationInfo> getAnnotationInfos(AnnotateDocumentRequest annotateDocumentRequest, String documentType) {
+        AnnotationDataEntity[] annotationsData = annotateDocumentRequest.getAnnotationsData();
+        // get document info - required to get document page height and calculate annotation top position
+        DocumentInfoContainer documentInfo = annotationHandler.getDocumentInfo(new File(annotateDocumentRequest.getGuid()).getName(), annotateDocumentRequest.getPassword());
+        List<AnnotationInfo> annotations = new ArrayList<>();
+        for (AnnotationDataEntity annotationData : annotationsData) {
+            // create annotator
+            PageData pageData = documentInfo.getPages().get(annotationData.getPageNumber() - 1);
+            // add annotation, if current annotation type isn't supported by the current document type it will be ignored
+            try {
+                annotations.add(AnnotatorFactory.createAnnotator(annotationData, pageData).getAnnotationInfo(documentType));
+            } catch (Exception ex) {
+                throw new TotalGroupDocsException(ex.getMessage(), ex);
+            }
+        }
+        return annotations;
+    }
+
+    @Override
+    public InputStream annotateByStream(AnnotateDocumentRequest annotateDocumentRequest) {
+        String documentGuid = annotateDocumentRequest.getGuid();
+        String documentType = checkedDocumentType(documentGuid, annotateDocumentRequest.getDocumentType());
+        List<AnnotationInfo> annotations = getAnnotationInfos(annotateDocumentRequest, documentType);
+        try {
+            return annotateDocument(documentGuid, documentType, annotations);
+        } catch (FileNotFoundException ex) {
+            throw new TotalGroupDocsException(ex.getMessage(), ex);
+        }
     }
 
     /**
