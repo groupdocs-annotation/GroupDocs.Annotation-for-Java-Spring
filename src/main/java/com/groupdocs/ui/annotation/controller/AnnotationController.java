@@ -3,6 +3,7 @@ package com.groupdocs.ui.annotation.controller;
 import com.groupdocs.ui.annotation.config.AnnotationConfiguration;
 import com.groupdocs.ui.annotation.entity.request.AnnotateDocumentRequest;
 import com.groupdocs.ui.annotation.entity.web.AnnotatedDocumentEntity;
+import com.groupdocs.ui.annotation.entity.web.AnnotationDataEntity;
 import com.groupdocs.ui.annotation.entity.web.AnnotationPageDescriptionEntity;
 import com.groupdocs.ui.annotation.service.AnnotationService;
 import com.groupdocs.ui.config.GlobalConfiguration;
@@ -27,7 +28,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
@@ -110,26 +110,19 @@ public class AnnotationController {
      * Download document
      *
      * @param documentGuid path to document parameter
-     * @param annotated    mark, annotated document or not
      * @param response     http response
      */
     @RequestMapping(value = "/downloadDocument", method = RequestMethod.GET)
     public void downloadDocument(@RequestParam("path") String documentGuid,
-                                 @RequestParam("annotated") Boolean annotated,
                                  HttpServletResponse response) {
         // get document path
         String fileName = FilenameUtils.getName(documentGuid);
-        // choose directory
-        AnnotationConfiguration annotationConfiguration = annotationService.getAnnotationConfiguration();
-        String pathToDownload = annotated ?
-                String.format("%s%s%s", annotationConfiguration.getOutputDirectory(), File.separator, fileName) :
-                documentGuid;
 
         // set response content info
         Utils.addFileDownloadHeaders(response, fileName, null);
 
         long length;
-        try (InputStream inputStream = new BufferedInputStream(new FileInputStream(pathToDownload));
+        try (InputStream inputStream = new BufferedInputStream(new FileInputStream(documentGuid));
              ServletOutputStream outputStream = response.getOutputStream()) {
             // download the document
             length = IOUtils.copyLarge(inputStream, outputStream);
@@ -161,6 +154,35 @@ public class AnnotationController {
         UploadedDocumentEntity uploadedDocument = new UploadedDocumentEntity();
         uploadedDocument.setGuid(pathname);
         return uploadedDocument;
+    }
+
+    /**
+     * Annotate document with annotations and download result without saving
+     *
+     * @return annotated document info
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/downloadAnnotated", consumes = APPLICATION_JSON_VALUE)
+    public void downloadAnnotated(@RequestBody AnnotateDocumentRequest annotateDocumentRequest, HttpServletResponse response) {
+        AnnotationDataEntity[] annotationsData = annotateDocumentRequest.getAnnotationsData();
+        if (annotationsData == null || annotationsData.length == 0) {
+            throw new IllegalArgumentException("Annotations data is empty");
+        }
+
+        // get document path
+        String fileName = FilenameUtils.getName(annotateDocumentRequest.getGuid());
+        // set response content info
+        Utils.addFileDownloadHeaders(response, fileName, null);
+
+        long length;
+        try (InputStream inputStream = annotationService.annotateByStream(annotateDocumentRequest);
+             ServletOutputStream outputStream = response.getOutputStream()) {
+            // download the document
+            length = IOUtils.copyLarge(inputStream, outputStream);
+        } catch (Exception ex) {
+            logger.error("Exception in downloading document", ex);
+            throw new TotalGroupDocsException(ex.getMessage(), ex);
+        }
+        Utils.addFileDownloadLengthHeader(response, length);
     }
 
     /**
