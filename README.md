@@ -1,6 +1,6 @@
 ![Alt text](https://raw.githubusercontent.com/groupdocs-annotation/groupdocs-annotation.github.io/master/resources/image/banner.png "GroupDocs.Annotation")
 # GroupDocs.Annotation-for-Java-Spring Example
-###### version 1.12.16
+###### version 1.12.17
 
 [![Build Status](https://travis-ci.org/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring.svg?branch=master)](https://travis-ci.org/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f6de7b4597a02ddb09df/maintainability)](https://codeclimate.com/github/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring/maintainability)
@@ -89,10 +89,10 @@ Download [latest release](https://github.com/groupdocs-annotation/GroupDocs.Anno
 **Note**: This method is **recommended** for running this sample behind firewall.
 
 ```bash
-curl -J -L -o release.tar.gz https://github.com/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring/releases/download/1.12.16/release.tar.gz
+curl -J -L -o release.tar.gz https://github.com/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring/releases/download/1.12.17/release.tar.gz
 tar -xvzf release.tar.gz
 cd release
-java -jar annotation-spring-1.12.16.jar configuration.yml
+java -jar annotation-spring-1.12.17.jar configuration.yml
 ## Open http://localhost:8080/annotation/ in your favorite browser.
 ```
 
