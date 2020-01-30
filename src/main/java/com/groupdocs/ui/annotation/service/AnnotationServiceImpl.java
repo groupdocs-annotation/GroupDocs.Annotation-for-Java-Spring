@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
@@ -177,7 +178,7 @@ public class AnnotationServiceImpl implements AnnotationService {
     public ImageOptions createImageOptions(String password) {
         ImageOptions imageOptions = new ImageOptions();
         // set password for protected document
-        if (!password.isEmpty()) {
+        if (!StringUtils.isEmpty(password)) {
             imageOptions.setPassword(password);
         }
         return imageOptions;

@@ -55,7 +55,7 @@ public class AnnotationController {
      * Get annotation page
      *
      * @param request
-     * @param model model data for template
+     * @param model   model data for template
      * @return template name
      */
     @RequestMapping(method = RequestMethod.GET)
@@ -70,6 +70,12 @@ public class AnnotationController {
         logger.debug("annotation config: {}", annotationConfiguration);
         model.put("annotationConfiguration", annotationConfiguration);
         return "annotation";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/loadConfig", produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public AnnotationConfiguration loadConfig() {
+        return annotationService.getAnnotationConfiguration();
     }
 
     /**
