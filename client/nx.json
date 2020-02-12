@@ -2,10 +2,7 @@
   "npmScope": "client",
   "implicitDependencies": {
     "angular.json": "*",
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
+    "package.json": "*",
     "tsconfig.json": "*",
     "tslint.json": "*",
     "nx.json": "*"
