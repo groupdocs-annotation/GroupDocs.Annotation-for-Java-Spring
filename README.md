@@ -192,12 +192,4 @@ Please have a look at the LICENSE.md for more details
 - .NET MVC [Document & PDF annotator](https://github.com/groupdocs-annotation/GroupDocs.Annotation-for-.NET-MVC)
 - .NET WebForms [Document & PDF annotator](https://github.com/groupdocs-annotation/GroupDocs.Annotation-for-.NET-WebForms)
 
-## Resources
-- **Website:** [www.groupdocs.com](http://www.groupdocs.com)
-- **Product Home:** [GroupDocs.Annotation for Java](https://products.groupdocs.com/annotation/java)
-- **Product API References:** [GroupDocs.Annotation for Java API](https://apireference.groupdocs.com)
-- **Download:** [Download GroupDocs.Annotation for Java](http://downloads.groupdocs.com/annotation/java)
-- **Documentation:** [GroupDocs.Annotation for Java Documentation](https://docs.groupdocs.com/dashboard.action)
-- **Free Support Forum:** [GroupDocs.Annotation for Java Free Support Forum](https://forum.groupdocs.com/c/annotation)
-- **Paid Support Helpdesk:** [GroupDocs.Annotation for Java Paid Support Helpdesk](https://helpdesk.groupdocs.com)
-- **Blog:** [GroupDocs.Annotation for Java Blog](https://blog.groupdocs.com/category/groupdocs-annotation-product-family)
+[Home](https://www.groupdocs.com/) | [Product Page](https://products.groupdocs.com/annotation/java) | [Documentation](https://docs.groupdocs.com/annotation/java/) | [Demos](https://products.groupdocs.app/annotation/family) | [API Reference](https://apireference.groupdocs.com/java/annotation) | [Examples](https://github.com/groupdocs-annotation/GroupDocs.Annotation-for-Java/tree/master/Examples) | [Blog](https://blog.groupdocs.com/category/annotation/) | [Free Support](https://forum.groupdocs.com/c/annotation) | [Temporary License](https://purchase.groupdocs.com/temporary-license)
