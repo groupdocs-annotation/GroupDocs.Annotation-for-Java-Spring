@@ -6,7 +6,7 @@
 
     <groupId>com.groupdocs.ui</groupId>
     <artifactId>annotation-spring</artifactId>
-    <version>1.12.24</version>
+    <version>1.12.25</version>
     <packaging>${packaging.type}</packaging>
 
     <name>GroupDocs.Annotation for Java Spring Sample</name>
