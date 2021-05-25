@@ -17,3 +17,6 @@ Licenses/*
 !Licenses/.gitkeep
 DocumentSamples/*
 !DocumentSamples/.gitkeep
+
+#License files
+*.lic
