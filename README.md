@@ -6,6 +6,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/f6de7b4597a02ddb09df/maintainability)](https://codeclimate.com/github/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring/maintainability)
 [![GitHub license](https://img.shields.io/github/license/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring.svg)](https://github.com/groupdocs-annotation/GroupDocs.Annotation-for-Java-Spring/blob/master/LICENSE)
 
+:warning: **This repository has moved to https://github.com/groupdocs-annotation/GroupDocs.Annotation-for-Java/tree/master/Demos/Spring**
+
 ## System Requirements
 - Java 8 (JDK 1.8)
 - Maven 3
